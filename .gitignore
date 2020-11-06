@@ -1,4 +1,10 @@
-# Created by .ignore support plugin (hsz.mobi)
-venv
+# Environments
 
-.idea
+.env
+.venv
+
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
