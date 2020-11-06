@@ -1,0 +1,111 @@
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .rate {
+        margin: auto;
+        height: 46px;
+        padding: 0 10px;
+    }
+
+    .rate:not(:checked) > input {
+        position: absolute;
+        top: -9999px;
+    }
+
+    .rate:not(:checked) > label {
+        float: right;
+        width: 1em;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 30px;
+        color: #ccc;
+    }
+
+    .rate:not(:checked) > label:before {
+        content: '★ ';
+    }
+
+    .rate > input:checked ~ label {
+        color: #ffc700;
+    }
+
+    .rate:not(:checked) > label:hover,
+    .rate:not(:checked) > label:hover ~ label {
+        color: #deb217;
+    }
+
+    .rate > input:checked + label:hover,
+    .rate > input:checked + label:hover ~ label,
+    .rate > input:checked ~ label:hover,
+    .rate > input:checked ~ label:hover ~ label,
+    .rate > label:hover ~ input:checked ~ label {
+        color: #c59b08;
+    }
+
+    /* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */
+</style>
+
+
+<div class="card text-center">
+    <div class="card-body">
+        <h5 class="card-title">
+            <a href="{% url 'libra' id=liber.iid %}"> {{ liber.titulli }} </a>
+        </h5>
+        <p class="card-text">{{ liber.autori }}</p>
+        <img src="{{ liber.img_src }}"/>
+    </div>
+    <p>Vlersuar: <b>{{ liber.vlersimi_mesatar }}</b></p>
+
+    {% if user.is_authenticated and edit %}
+        {% if liber in user.profil.librat.all %}
+
+            <form action="{% url 'vlerso' %}" method="POST" style="margin: auto">
+                {% csrf_token %}
+                <div class="rate">
+                    <input type="radio" id="star5" name="vlerso" value="5"/>
+                    <label for="star5" title="text">5 stars</label>
+                    <input type="radio" id="star4" name="vlerso" value="4"/>
+                    <label for="star4" title="text">4 stars</label>
+                    <input type="radio" id="star3" name="vlerso" value="3"/>
+                    <label for="star3" title="text">3 stars</label>
+                    <input type="radio" id="star2" name="vlerso" value="2"/>
+                    <label for="star2" title="text">2 stars</label>
+                    <input type="radio" id="star1" name="vlerso" value="1"/>
+                    <label for="star1" title="text">1 star</label>
+
+                </div>
+                <input type="submit" class="btn btn-primary" value="Vlerso"/>
+                <br>
+                <input type="text" name="liber" value="{{ liber.iid }}" style="display:none"/>
+
+            </form>
+
+            <br>
+            <div class="text-center pb-3">
+                <form action="{% url 'hiq_liber' %}" method="post">
+                    {% csrf_token %}
+                    {{ hiq_form }}
+                    <input type="submit" class="btn btn-danger" value="Hiq"/>
+                </form>
+            </div>
+        {% else %}
+            <div class="text-center pb-3">
+                <form action="{% url 'shto_liber' %}" method="post">
+                    {% csrf_token %}
+                    {{ shto_form }}
+                    <input type="submit" class="btn btn-primary" value="Shto"/>
+                </form>
+            </div>
+        {% endif %}
+
+    {% endif %}
+    <div class="card-footer text-muted">
+        {{ liber.cmimi }}
+    </div>
+
+
+</div>

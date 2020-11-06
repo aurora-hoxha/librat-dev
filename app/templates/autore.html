@@ -1,0 +1,15 @@
+{% extends "baze.html" %}
+
+{% block emri_i_faqes %}
+<div class="container-fluid mt-5">
+    <h2>{{ titulli_i_faqes }}</h2>
+</div>
+{% endblock %}
+
+{% block permbajtja %}
+        {% for liber in librat %}
+            {% include "komponente/liber.html" %}
+            <br/>
+        {% endfor %}
+
+{% endblock %}

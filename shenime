@@ -1,0 +1,29 @@
+
+<form action="<url>" method="<tipi i metodes>">
+    <input 1>
+    <input 2>
+    ...
+    <input type="submit">
+</form>
+
+GET -> nese duam te marrim nje resource nga serveri
+POST -> nese duam te "udhezojme" serverin te ndryshoje gjendjen
+    (p.sh.: krijimi i nje objekti te ri ne databaze)
+
+Request (Client-Server):
+	POST / HTTP/1.1
+	Host: www.example.com
+
+	<verb> <relative-path (URI)> <specification>
+	Host: <plaintext>
+
+	Verbs: GET POST PUT DELETE OPTIONS HEAD ...
+
+    <body>
+        <form action="<url>" method="POST">
+            <input 1>
+            <input 2>
+            ...
+            <input type="submit">
+        </form>
+    </body>
