@@ -1,11 +1,17 @@
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Avg
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
+from app.models import Liber, Vlersim
 from . import models
+from .context_processors import matrix_vlersim_per_perdorues, clean_cache
 from .forms import HiqLiberForm, ShtoLiberForm
-from .models import Vlersim, Liber
 
 
 @require_http_methods(["GET"])
@@ -40,7 +46,7 @@ def autore(request, id):
     return render(request, 'autore.html', data)
 
 
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/app/login/')
 @require_http_methods(["GET"])
 def librat_e_mi(request):
     user = request.user
@@ -52,7 +58,7 @@ def librat_e_mi(request):
     return render(request, 'libratemi.html', data)
 
 
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/app/login/')
 @require_http_methods(["POST"])
 def shto_liber(request):
     form = ShtoLiberForm(request.POST)
@@ -72,7 +78,7 @@ def shto_liber(request):
     return redirect('libra', id=form.cleaned_data['liber_id'])
 
 
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/app/login/')
 @require_http_methods(["POST"])
 def hiq_liber(request):
     form = HiqLiberForm(request.POST)
@@ -89,7 +95,7 @@ def hiq_liber(request):
     return redirect('libra', id=form.cleaned_data['liber_id'])
 
 
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/app/login/')
 @require_http_methods(["POST"])
 def vlerso_liber(request):
     liber_id = None
@@ -110,3 +116,26 @@ def vlerso_liber(request):
     liber.vlersimi_avg = round(vlersimi_mesatar['vlersimi__avg'], 4)
     liber.save()
     return redirect('/app/libratemi/')
+
+
+def login_request(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request=request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}")
+                matrix_vlersim_per_perdorues(user.id)
+                clean_cache()
+                return redirect('/app/libratemi/')
+            else:
+                messages.error(request, "Invalid username or password.")
+        else:
+            messages.error(request, "Invalid username or password.")
+    form = AuthenticationForm()
+    return render(request=request,
+                  template_name="registration/login.html",
+                  context={"form": form})

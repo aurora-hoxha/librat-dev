@@ -28,3 +28,23 @@ Pra, nese kemi databazen e vjeter bejme keto hapa (ne kemi DB e re):
 
 username: Demo
 password: demo2020
+
+______________________________________________________________
+
+**##Update, branch i ri##**
+
+Ne prezantimin e meparshem, url /rekomandime kerkonte kohe ekzekutimi pasi procesoheshin shume te dhena (120k+).
+Mendova te perfshij nje auto schedular si CronTab por duke qene se OS im eshte Windows dhe CronTab kerkon Linux, nuk munda ta perdor.
+Kete librari e zevendesova me 'background_task'. 
+
+Ceshtja kyce e optimizimit eshte kur perdoruesi logohet per here te pare, ne background ne proces paralel gjenerohet
+lista e librave te rekomandushem. Eshte i nevojshem nje proces paralel pasi kodi ne django ekzekutohet ne menryre iterative
+dhe serish do kishim humbje kohe. 
+Pra ne momentin qe perdoruesi logohet, ngreme  funksionin e rekomandimit. Nese perdoruesi menjehere klikon 'rekomandime' 
+kjo view do te presi sa te ekzekutohet procesi paralel, edhe te marre te dhenat prej ati procesi.
+Kjo lloj zgjidhje e rrit performancen me gati 90%, por do pak me shume kohe qe te testohet per ndonje anomali.
+(Django async views mund te ishte nje zgjidhje tjeter e mire, por mendoj qe del jasht scop-it te kesaj detyre)
+
+** Hapat e ekzekutimit **
+1. py manage.py runserver
+2. py manage.py process_tasks

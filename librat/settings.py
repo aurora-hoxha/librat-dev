@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "app",
     # "django_extensions"
+    'background_task',
+
 ]
 
 MIDDLEWARE = [
@@ -54,9 +56,7 @@ ROOT_URLCONF = 'librat.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            'C:/Users/stiv/PycharmProjects/webapp1/librat/app/templates/'
-        ],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 'app.context_processors.matrix_vlersim_per_perdorues'
             ],
         },
     },

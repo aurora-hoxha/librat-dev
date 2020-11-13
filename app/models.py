@@ -49,7 +49,6 @@ class Vlersim(models.Model):
     vlersimi = models.IntegerField(choices=VLERSIMET, default=0)
 
 
-
 class Profil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     librat = models.ManyToManyField(Liber)
@@ -62,3 +61,7 @@ class Profil(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.profil.save()
+
+
+class Cache(models.Model):
+    librat_to_string = models.CharField(max_length=5000)

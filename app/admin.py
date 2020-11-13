@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from .models import Liber
+from app.models import Liber
 
 admin.site.register(Liber)
