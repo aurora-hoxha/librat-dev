@@ -65,3 +65,4 @@ class Profil(models.Model):
 
 class Cache(models.Model):
     librat_to_string = models.CharField(max_length=5000)
+    perdorues = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True)

@@ -9,8 +9,8 @@ from app.models import Liber, Vlersim, Cache
 
 
 # Auto procesim
-@background(schedule=0)
-def matrix_vlersim_per_perdorues(user_id):
+@background()
+def matrix_vlersim_per_perdorues(user_id=None):
     print(f'Para: {globals.VLERSIM_PER_PERDORUES}')
     globals.VLERSIM_PER_PERDORUES = False
     globals.VLERSIM_PER_PERDORUES_MATRIX = None
@@ -75,7 +75,8 @@ def matrix_vlersim_per_perdorues(user_id):
     print('________________________________')
     globals.LIBRA_TE_REKOMANDUAR = libra_te_rekomaduar
 
-    cache = Cache.objects.create(librat_to_string=str(libra_te_rekomaduar))
+    if not Cache.objects.filter(perdorues_id=perdoruesi_loguar).exists():
+        cache = Cache.objects.create(librat_to_string=str(libra_te_rekomaduar), perdorues_id=perdoruesi_loguar)
 
     # quit()
 
@@ -140,7 +141,9 @@ def rekomando_liber(perdoruesi_loguar, perdoruesit_e_ngjashem, vlersim_matrix, l
 
     return ids_libra_top  # items
 
+
 # Auto procesim
-@background(schedule=1000)
+@background(schedule=200)
 def clean_cache():
+    print('Fshirje')
     Cache.objects.all().delete()

@@ -11,9 +11,9 @@ from app.models import Liber, Cache
 def rekomandime(request):
     while True:
         time.sleep(1.1)
-        if Cache.objects.last():
+        if Cache.objects.filter(perdorues=request.user).last():
             break
-    libra_te_rekomaduar_ids = ast.literal_eval(Cache.objects.last().librat_to_string)
+    libra_te_rekomaduar_ids = ast.literal_eval(Cache.objects.filter(perdorues=request.user).last().librat_to_string)
     data = {
         'titulli_i_faqes': 'Librat e Sygjeruar',
         'librat': [lib.as_dict() for lib in Liber.objects.filter(iid__in=libra_te_rekomaduar_ids)],
