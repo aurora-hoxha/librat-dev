@@ -1,4 +1,5 @@
 Branch: **master** rekomandimet kryhen synchronous dhe vonon pak sa te ngarkohet '/rekomandime'
+
 Branch: **rekomandime_optimizim** rekomandimet kryhen paralelisht dhe nuk bllokojne perdorimin e aplikacionit (asynchronous).
 
 ______________________________________________________________
