@@ -128,7 +128,7 @@ def login_request(request):
             if user is not None:
                 login(request, user)
                 messages.info(request, f"You are now logged in as {username}")
-                matrix_vlersim_per_perdorues(user.id, repeat=1)
+                matrix_vlersim_per_perdorues(user.id, repeat=10)
                 clean_cache()
                 return redirect('/app/libratemi/')
             else:

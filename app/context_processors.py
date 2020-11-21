@@ -12,16 +12,16 @@ from app.models import Liber, Vlersim, Cache
 @background()
 def matrix_vlersim_per_perdorues(user_id=None):
     print(f'Para: {globals.VLERSIM_PER_PERDORUES}')
-    globals.VLERSIM_PER_PERDORUES = False
-    globals.VLERSIM_PER_PERDORUES_MATRIX = None
+
 
     ka_vleresim = Vlersim.objects.filter(perdorues=user_id).exists()
     if not ka_vleresim:
-        quit()
+        # quit()
+        return
 
     # Marrim Librat nga databaza si queryset edhe i konvertojme ne pandas DataFrame
     liber_queryset = Liber.objects.values_list('titulli', 'autori', 'cmimi', 'img_src', 'iid', 'vlersimi_avg').all()
-    kolonat_e_librit = columns = ['titulli', 'autori', 'cmimi', 'img_src', 'iid', 'vlersimi_avg']
+    kolonat_e_librit = ['titulli', 'autori', 'cmimi', 'img_src', 'iid', 'vlersimi_avg']
     librat_df = pd.DataFrame.from_records(liber_queryset, columns=kolonat_e_librit)
 
     # Marrim Vlersimit nga databaza si queryset edhe i konvertojme ne pandas DataFrame
@@ -60,9 +60,6 @@ def matrix_vlersim_per_perdorues(user_id=None):
     # replace NaN values with 0
     vlersim_matrix = vlersim_matrix.fillna(0)
 
-    globals.VLERSIM_PER_PERDORUES = True
-    globals.VLERSIM_PER_PERDORUES_MATRIX = vlersim_matrix
-    # globals.LIBRAT_DF = librat_df
 
     # vlersim_matrix, librat_df = globals.VLERSIM_PER_PERDORUES_MATRIX
     perdoruesi_loguar = user_id
@@ -143,7 +140,7 @@ def rekomando_liber(perdoruesi_loguar, perdoruesit_e_ngjashem, vlersim_matrix, l
 
 
 # Auto procesim
-@background(schedule=200)
+@background(schedule=400)
 def clean_cache():
     print('Fshirje')
     Cache.objects.all().delete()
